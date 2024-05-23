@@ -1,5 +1,5 @@
 from typing import List
-from fastapi import Depends, FastAPI, HTTPException
+from fastapi import Depends, FastAPI, HTTPException, WebSocket, WebSocketDisconnect
 from sqlalchemy.orm import Session
 
 from . import crud, models, schemas
@@ -8,6 +8,37 @@ from .database import SessionLocal, engine
 models.Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
+
+class ConnectionManager:
+    def __init__(self):
+        self.active_connections: List[WebSocket] = []
+        self.active_chat: List = []
+
+    async def connect(self, websocket: WebSocket):
+        await websocket.accept()
+        self.active_connections.append(websocket)
+
+    async def disconnect(self, websocket: WebSocket):
+        self.active_connections.remove(websocket)
+
+    async def broadcast(self, message: str):
+        for connection in self.active_connections:
+            self.active_chat.append(message)
+            await connection.send_json(self.active_chat)
+
+manager = ConnectionManager()
+
+@app.websocket("/ws")
+async def websocket_endpoint(websocket: WebSocket):
+    await manager.connect(websocket)
+    try:
+        while True:
+            data = await websocket.receive_text()
+            await manager.broadcast(f"Client says: {data}")
+    except WebSocketDisconnect:
+        await manager.disconnect(websocket)
+        await manager.broadcast("A client disconnected.")
+
 
 # Dependency
 def get_db():
