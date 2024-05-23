@@ -29,15 +29,14 @@ class Ticket(TicketBase):
 
 class MessageBase(BaseModel):
     message: str
-    user_id: int
     room_id: int
 
 class MessageCreate(MessageBase):
     user_id: int
-    room_id: int
 
 class Message(MessageBase):
     id: int
+    user_id: int
 
     class Config:
         from_attributes = True

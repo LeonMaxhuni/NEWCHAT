@@ -1,3 +1,4 @@
+from typing import List
 from fastapi import Depends, FastAPI, HTTPException
 from sqlalchemy.orm import Session
 
@@ -34,15 +35,20 @@ def create_user(user: schemas.UserCreate, db: Session = Depends(get_db)):
         raise HTTPException(status_code=400, detail="Email already registered")
     return crud.create_user(db = db, user = user)
 
-@app.post("/users/{user_id}/ticket/")
+@app.get("/users/{user_id}/ticket/", response_model=List[schemas.Ticket])
+def read_tickets(user_id:int, db: Session = Depends(get_db)):
+    return crud.get_tickets(db = db, owner_id = user_id)
+
+@app.post("/users/{user_id}/ticket/", response_model=schemas.Ticket)
 def create_user_ticket(user_id: int, db: Session = Depends(get_db)):
     return crud.create_user_ticket(db = db, user_id = user_id)
 
-# @app.post("/users/{user_id}/ticket/{room_id}", response_model=schemas.Message)
-# def create_message(user_id: int, room_id: int, message: schemas.MessageCreate, db: Session = Depends(get_db)):
-#     message.user_id = user_id
-#     message.room_id = room_id
-#     return crud.create_message(db=db, message=message)
+@app.get("/users/{user_id}/ticket/{room_id}", response_model=List[schemas.Message])
+def read_messages(user_id: int, room_id: int, db: Session = Depends(get_db)):
+    tickets = crud.get_messages(db = db, room_id = room_id)
+    if tickets is None:
+        raise HTTPException(status_code=404, detail="No tickets found")
+    return tickets
 
 @app.post("/users/{user_id}/ticket/{room_id}", response_model=schemas.Message)
 def create_message(user_id: int, room_id: int, message: str, db: Session = Depends(get_db)):
@@ -53,4 +59,4 @@ def create_message(user_id: int, room_id: int, message: str, db: Session = Depen
     message_data['message'] = message
     new_message = schemas.MessageCreate(**message_data)
     
-    return crud.create_message(db=db, message=new_message)
+    return crud.create_message(db = db, message=new_message)

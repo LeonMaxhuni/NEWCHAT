@@ -33,12 +33,18 @@ def create_user(db: Session, user: schemas.UserCreate):
 # def get_items(db: Session, skip: int = 0, limit: int = 100):
 #     return db.query(models.Item).offset(skip).limit(limit).all()
 
+def get_tickets(db: Session, owner_id: int, skip: int = 0, limit: int = 100):
+    return db.query(models.Ticket).where(models.Ticket.owner_id == owner_id).offset(skip).limit(limit).all()
+
 def create_user_ticket(db: Session, user_id: int):
     db_ticket = models.Ticket(owner_id = user_id)
     db.add(db_ticket)
     db.commit()
     db.refresh(db_ticket)
     return db_ticket
+
+def get_messages(db: Session, room_id: int, skip: int = 0, limit: int = 100):
+    return db.query(models.Message).filter(models.Message.room_id == room_id).offset(skip).limit(limit).all()
 
 def create_message(db: Session, message: schemas.MessageCreate):
     db_message = models.Message(message = message.message, room_id = message.room_id, user_id = message.user_id)
