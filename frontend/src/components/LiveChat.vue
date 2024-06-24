@@ -40,7 +40,7 @@ onBeforeUnmount(() => {
     <div>
         <h1>Webscokets</h1>
         <input v-model="message">
-        <button @click="sendMessage"></button>
+        <button @click="sendMessage">Send</button>
         <p>Response: {{ response }}</p>
         <!-- <ul>
             <li v-for="item in allMessages" :key="item.number">
@@ -51,4 +51,5 @@ onBeforeUnmount(() => {
 </template>
 
 <style>
+
 </style>

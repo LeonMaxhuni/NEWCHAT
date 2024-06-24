@@ -3,7 +3,7 @@ from fastapi import Depends, FastAPI, HTTPException, WebSocket, WebSocketDisconn
 from sqlalchemy.orm import Session
 
 from . import crud, models, schemas
-from .database import SessionLocal, engine
+from .database import SessionLocal, engine 
 
 models.Base.metadata.create_all(bind=engine)
 
@@ -38,7 +38,6 @@ async def websocket_endpoint(websocket: WebSocket):
     except WebSocketDisconnect:
         await manager.disconnect(websocket)
         await manager.broadcast("A client disconnected.")
-
 
 # Dependency
 def get_db():
