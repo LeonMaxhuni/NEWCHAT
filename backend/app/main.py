@@ -1,5 +1,6 @@
 from typing import List
 from fastapi import Depends, FastAPI, HTTPException, WebSocket, WebSocketDisconnect
+from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
 
 from . import crud, models, schemas
@@ -8,6 +9,19 @@ from .database import SessionLocal, engine
 models.Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
+
+origins = [
+    "http://localhost:5173",
+    "http://localhost:8000", 
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 class ConnectionManager:
     def __init__(self):
@@ -81,12 +95,6 @@ def read_messages(user_id: int, room_id: int, db: Session = Depends(get_db)):
     return tickets
 
 @app.post("/users/{user_id}/ticket/{room_id}", response_model=schemas.Message)
-def create_message(user_id: int, room_id: int, message: str, db: Session = Depends(get_db)):
-
-    message_data = message.model_dump()
-    message_data['user_id'] = user_id
-    message_data['room_id'] = room_id
-    message_data['message'] = message
-    new_message = schemas.MessageCreate(**message_data)
-    
-    return crud.create_message(db = db, message=new_message)
+def create_message(user_id: int, room_id: int, message: schemas.MessageCreate, db: Session = Depends(get_db)):
+    new_message = crud.create_message(db=db, message=message)
+    return new_message

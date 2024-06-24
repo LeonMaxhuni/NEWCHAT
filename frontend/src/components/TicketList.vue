@@ -9,10 +9,11 @@ const data = ref([
     {"owner_id": "Loading2", "id": "Loading2"}
 ]);
 
-onMounted(
+onMounted(() => {
     axios.get("http://localhost:8000/users/3/ticket/")
     .then(response => {data.value = response.data; console.log(response)})
-);
+    .catch(error => {console.error("There was an error fetching the data:", error);});
+});
 
 </script>
 
