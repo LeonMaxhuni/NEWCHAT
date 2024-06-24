@@ -19,8 +19,8 @@ onMounted(() => {
 
 <template>
     <div>
-        <p>{{ data[0].owner_id }}</p>
-        <p>Ticket Owner</p>
+        <p>Owner ID</p>
+        <p>Ticket Number</p>
     </div>
     <IconTicket v-for="item in data" v-bind:key="item.id" v-bind:owner_id="item.owner_id" v-bind:id="item.id" />
 </template>
