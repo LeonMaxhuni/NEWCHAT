@@ -29,10 +29,10 @@ class Ticket(TicketBase):
 
 class MessageBase(BaseModel):
     message: str
-    room_id: int
 
 class MessageCreate(MessageBase):
     user_id: int
+    room_id: int
 
 class Message(MessageBase):
     id: int

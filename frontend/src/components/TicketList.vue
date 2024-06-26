@@ -1,8 +1,9 @@
 <script setup>
 
 import { onMounted , ref } from "vue";
-import IconTicket from "../components/icons/IconTicket.vue"
 import axios from "axios";
+
+import IconTicket from "../components/icons/IconTicket.vue"
 
 const data = ref([
     {"owner_id": "Loading", "id": "Loading"},

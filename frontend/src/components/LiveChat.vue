@@ -1,5 +1,8 @@
 <script setup>
+
 import { ref, onMounted, onBeforeUnmount } from 'vue'
+
+import MessagesList from './MessagesList.vue';
 
 const message = ref("");
 const response = ref("");
@@ -39,17 +42,9 @@ onBeforeUnmount(() => {
 <template>
     <div>
         <h1>Webscokets</h1>
+        <MessagesList />
         <input v-model="message">
         <button @click="sendMessage">Send</button>
         <p>Response: {{ response }}</p>
-        <!-- <ul>
-            <li v-for="item in allMessages" :key="item.number">
-                {{ item }}
-            </li>
-        </ul> -->
     </div>
 </template>
-
-<style>
-
-</style>

@@ -1,7 +1,9 @@
 <script setup>
+
 defineProps({
-    "owner_id": String,"id": String
+    "owner_id": String, "id": String
 })
+
 </script>
 
 <template>
