@@ -1,6 +1,8 @@
 <script setup>
-import NewChat from "../components/LiveChat.vue"
+// import NewChat from "../components/LiveChat.vue"
+import { RouterView } from "vue-router";
 import TicketList from "../components/TicketList.vue"
+// import RandomText from "../components/RandomInfo.vue"
 </script>
 
 <template>
@@ -12,7 +14,13 @@ import TicketList from "../components/TicketList.vue"
   </div>
 
   <div class="mid-panel">
-    <NewChat />
+    <!-- <NewChat /> -->
+    <!-- <RandomText /> -->
+     <nav>
+      <RouterLink to="/home/chat">CHAT VIEW </RouterLink>
+      <RouterLink to="/home/welcome">LOGIN VIEW</RouterLink>
+     </nav>
+     <RouterView></RouterView>
   </div>
 
 </template>
