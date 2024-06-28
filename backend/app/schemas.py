@@ -40,3 +40,18 @@ class Message(MessageBase):
 
     class Config:
         from_attributes = True
+
+
+class TicketMessageBase(MessageBase):
+    pass
+
+class TicketMessageCreate(TicketMessageBase):
+    pass
+
+class TicketMessage(TicketMessageBase):
+    user_id: int
+    message: str
+    user_name: str
+
+    class Config:
+        from_attributes = True

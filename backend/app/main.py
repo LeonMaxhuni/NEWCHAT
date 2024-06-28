@@ -87,7 +87,8 @@ def read_tickets(user_id:int, db: Session = Depends(get_db)):
 def create_user_ticket(user_id: int, db: Session = Depends(get_db)):
     return crud.create_user_ticket(db = db, user_id = user_id)
 
-@app.get("/users/{user_id}/ticket/{room_id}", response_model=List[schemas.Message])
+# @app.get("/users/{user_id}/ticket/{room_id}", response_model=List[schemas.TicketMessage])
+@app.get("/users/{user_id}/ticket/{room_id}")
 def read_messages(user_id: int, room_id: int, db: Session = Depends(get_db)):
     tickets = crud.get_messages(db = db, room_id = room_id)
     if tickets is None:

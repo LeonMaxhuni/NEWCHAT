@@ -44,7 +44,8 @@ def create_user_ticket(db: Session, user_id: int):
     return db_ticket
 
 def get_messages(db: Session, room_id: int, skip: int = 0, limit: int = 100):
-    return db.query(models.Message).filter(models.Message.room_id == room_id).offset(skip).limit(limit).all()
+    # return db.query(models.Message).filter(models.Message.room_id == room_id).offset(skip).limit(limit).all()
+    return db.query(models.Message).join(models.User).filter(models.Message.room_id == room_id).offset(skip).limit(limit).all()
 
 def create_message(db: Session, message: schemas.MessageCreate):
     db_message = models.Message(message = message.message, room_id = message.room_id, user_id = message.user_id)
@@ -52,10 +53,3 @@ def create_message(db: Session, message: schemas.MessageCreate):
     db.commit()
     db.refresh(db_message)
     return db_message
-
-# def create_user_item(db: Session, item: schemas.ItemCreate, user_id: int):
-#     db_item = models.Item(**item.dict(), owner_id=user_id)
-#     db.add(db_item)
-#     db.commit()
-#     db.refresh(db_item)
-#     return db_item
